@@ -1,0 +1,322 @@
+SELECT *
+FROM dbo.StopAndSearch
+
+SELECT *
+FROM dbo.CrimeOutcomes
+
+SELECT *
+FROM dbo.StreetCrime;
+
+-- Inserting Data into main tables and dropping unwanted tables
+
+-- StopAndSearch table
+
+INSERT INTO dbo.StopAndSearch (Type,Date,Part_of_a_policing_operation,Policing_operation,Latitude,Longitude,Gender,Age_range,Self_defined_ethnicity,Officer_defined_ethnicity,Legislation,Object_of_search,Outcome,Outcome_linked_to_object_of_search,Removal_of_more_than_just_outer_clothing)
+SELECT Type,Date,Part_of_a_policing_operation,Policing_operation,Latitude,Longitude,Gender,Age_range,Self_defined_ethnicity,Officer_defined_ethnicity,Legislation,Object_of_search,Outcome,Outcome_linked_to_object_of_search,Removal_of_more_than_just_outer_clothing
+FROM dbo.hssas;
+
+INSERT INTO dbo.StopAndSearch (Type,Date,Part_of_a_policing_operation,Policing_operation,Latitude,Longitude,Gender,Age_range,Self_defined_ethnicity,Officer_defined_ethnicity,Legislation,Object_of_search,Outcome,Outcome_linked_to_object_of_search,Removal_of_more_than_just_outer_clothing)
+SELECT Type,Date,Part_of_a_policing_operation,Policing_operation,Latitude,Longitude,Gender,Age_range,Self_defined_ethnicity,Officer_defined_ethnicity,Legislation,Object_of_search,Outcome,Outcome_linked_to_object_of_search,Removal_of_more_than_just_outer_clothing
+FROM dbo.sysas;
+
+INSERT INTO dbo.StopAndSearch (Type,Date,Part_of_a_policing_operation,Policing_operation,Latitude,Longitude,Gender,Age_range,Self_defined_ethnicity,Officer_defined_ethnicity,Legislation,Object_of_search,Outcome,Outcome_linked_to_object_of_search,Removal_of_more_than_just_outer_clothing)
+SELECT Type,Date,Part_of_a_policing_operation,Policing_operation,Latitude,Longitude,Gender,Age_range,Self_defined_ethnicity,Officer_defined_ethnicity,Legislation,Object_of_search,Outcome,Outcome_linked_to_object_of_search,Removal_of_more_than_just_outer_clothing
+FROM dbo.wysas;
+
+
+DROP TABLE dbo.hssas;
+DROP TABLE dbo.wysas;
+DROP TABLE dbo.sysas;
+
+-- CrimeOutcomes Table
+
+INSERT INTO dbo.CrimeOutcomes (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type
+FROM dbo.hsco;
+
+INSERT INTO dbo.CrimeOutcomes (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type
+FROM dbo.nyco;
+
+INSERT INTO dbo.CrimeOutcomes (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type
+FROM dbo.syco;
+
+INSERT INTO dbo.CrimeOutcomes (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Outcome_type
+FROM dbo.wyco;
+
+DROP TABLE dbo.hsco;
+DROP TABLE dbo.wyco;
+DROP TABLE dbo.syco;
+DROP TABLE dbo.nyco;
+
+-- StreetCrime Table
+
+INSERT INTO dbo.StreetCrime (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context
+FROM dbo.hssc;
+
+INSERT INTO dbo.StreetCrime (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context
+FROM dbo.nysc;
+
+INSERT INTO dbo.StreetCrime (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context
+FROM dbo.sysc;
+
+INSERT INTO dbo.StreetCrime (Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context)
+SELECT Crime_ID,Month,Reported_by,Falls_within,Longitude,Latitude,Location,LSOA_code,LSOA_name,Crime_type,Last_outcome_category,Context
+FROM dbo.wysc;
+
+DROP TABLE dbo.hssc;
+DROP TABLE dbo.nysc;
+DROP TABLE dbo.sysc;
+DROP TABLE dbo.wysc;
+
+
+-- Altering Data types
+
+ALTER TABLE dbo.nysc
+ALTER COLUMN Month date;
+
+ALTER TABLE dbo.StopAndSearch
+Alter COLUMN Date DATE;
+
+
+-- Cleaning Data
+
+-- Cleaning Data
+
+-- TABLE STOPANDSEARCH
+
+-- Removing Duplicates
+
+WITH CTE_Duplicates AS (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY [Type], [Date], [Latitude], [Longitude],[Part_of_a_policing_operation], [Policing_operation], [Gender],[Age_range], [Self_defined_ethnicity],[Officer_defined_ethnicity],[Legislation],[Object_of_search],[Outcome],[Outcome_linked_to_object_of_search],[Removal_of_more_than_just_outer_clothing]
+               ORDER BY [Type]) AS RowNum
+    FROM [dbo].[StopAndSearch]
+)
+DELETE FROM CTE_Duplicates
+WHERE RowNum > 1;
+
+
+-- Remove Nulls
+
+BEGIN TRANSACTION;
+
+UPDATE dbo.StopAndSearch
+SET Type = 'Unknown'
+WHERE Type IS NULL;
+
+SELECT *
+FROM dbo.StopAndSearch
+WHERE ISNUMERIC(Latitude) = 0;
+
+UPDATE dbo.StopAndSearch
+SET [Latitude] = 0 -- or you can set it to 0 or another valid float value
+WHERE ISNUMERIC([Latitude]) = 0;
+
+UPDATE dbo.StopAndSearch
+SET [Longitude] = 0 -- or you can set it to 0 or another valid float value
+WHERE ISNUMERIC([Longitude]) = 0;
+
+
+UPDATE dbo.StopAndSearch
+SET Gender = 'Unknown'
+WHERE Gender IS NULL;
+
+UPDATE StopAndSearch
+SET Part_of_a_policing_operation = 'FALSE'
+WHERE Part_of_a_policing_operation = 0;
+
+UPDATE StopAndSearch
+SET Part_of_a_policing_operation = 'TRUE'
+WHERE Part_of_a_policing_operation = 1;
+
+UPDATE dbo.StopAndSearch
+SET Age_range = 'Unknown'
+WHERE Age_range IS NULL;
+
+UPDATE StopAndSearch
+SET Policing_operation = 'Unknown'
+WHERE Policing_operation IS NULL;
+
+UPDATE dbo.StopAndSearch
+SET Self_defined_ethnicity = 'Unknown'
+WHERE Self_defined_ethnicity IS NULL;
+
+UPDATE dbo.StopAndSearch
+SET Officer_defined_ethnicity = 'Unknown'
+WHERE Officer_defined_ethnicity IS NULL;
+
+UPDATE dbo.StopAndSearch
+SET Legislation = 'Unknown'
+WHERE Legislation IS NULL;
+
+UPDATE dbo.StopAndSearch
+SET Object_of_search = 'Unknown'
+WHERE Object_of_search IS NULL;
+
+UPDATE dbo.StopAndSearch
+SET Outcome = 'Unknown'
+WHERE Outcome IS NULL;
+
+UPDATE StopAndSearch
+SET Outcome_linked_to_object_of_search = 'FALSE'
+WHERE Outcome_linked_to_object_of_search = 0;
+
+UPDATE StopAndSearch
+SET Outcome_linked_to_object_of_search = 'TRUE'
+WHERE Outcome_linked_to_object_of_search = 1;
+
+UPDATE StopAndSearch
+SET Removal_of_more_than_just_outer_clothing = 'FALSE'
+WHERE Removal_of_more_than_just_outer_clothing = 0;
+
+UPDATE StopAndSearch
+SET Removal_of_more_than_just_outer_clothing = 'TRUE'
+WHERE Removal_of_more_than_just_outer_clothing = 1;
+
+ALTER TABLE dbo.StopAndSearch
+DROP COLUMN RemovalStatus;
+
+ALTER TABLE dbo.StopAndSearch
+Alter COLUMN Outcome_linked_to_object_of_search BIT;
+
+SELECT *
+FROM dbo.StopAndSearch;
+
+
+-- TABLE CrimeOutcomes
+
+WITH CTE_Duplicates AS (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY Crime_ID, Month, Reported_by, Falls_within, Longitude, Latitude, Location,LSOA_code, LSOA_name, Outcome_type
+               ORDER BY Crime_ID) AS RowNum
+    FROM dbo.CrimeOutcomes
+)
+DELETE FROM CTE_Duplicates
+WHERE RowNum > 1;
+
+UPDATE dbo.CrimeOutcomes
+SET Crime_ID = 'Unknown'
+WHERE Crime_ID IS NULL;
+
+UPDATE dbo.CrimeOutcomes
+SET Month = 'Unknown'
+WHERE Month IS NULL;
+
+UPDATE dbo.CrimeOutcomes
+SET Reported_by = 'Unknown'
+WHERE Reported_by IS NULL;
+
+UPDATE dbo.CrimeOutcomes
+SET Falls_within = 'Unknown'
+WHERE Falls_within IS NULL;
+
+UPDATE dbo.CrimeOutcomes
+SET Longitude = 0 
+WHERE ISNUMERIC(Longitude) = 0;
+
+UPDATE dbo.CrimeOutcomes
+SET Latitude = 0 
+WHERE ISNUMERIC(Latitude) = 0;
+
+UPDATE dbo.CrimeOutcomes
+SET Location = 'Unknown'
+WHERE Location IS NULL;
+
+UPDATE dbo.CrimeOutcomes
+SET LSOA_code = 'Unknown'
+WHERE LSOA_code IS NULL;
+
+UPDATE dbo.CrimeOutcomes
+SET LSOA_name = 'Unknown'
+WHERE LSOA_name IS NULL;
+
+UPDATE dbo.CrimeOutcomes
+SET Outcome_type = 'Unknown'
+WHERE Outcome_type IS NULL;
+
+SELECT *
+FROM dbo.CrimeOutcomes
+
+
+-- TABLE STREETCRIME
+
+WITH CTE_Duplicates AS (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY Crime_ID, Month, Reported_by, Falls_within, Longitude, Latitude, Location,LSOA_code, LSOA_name,Crime_type,Last_outcome_category,Context
+               ORDER BY Crime_ID) AS RowNum
+    FROM dbo.StreetCrime
+)
+DELETE FROM CTE_Duplicates
+WHERE RowNum > 1;
+
+UPDATE dbo.StreetCrime
+SET Crime_ID = 'Unknown'
+WHERE Crime_ID IS NULL;
+
+UPDATE dbo.StreetCrime
+SET Month = 'Unknown'
+WHERE Month IS NULL;
+
+UPDATE dbo.StreetCrime
+SET Reported_by = 'Unknown'
+WHERE Reported_by IS NULL;
+
+UPDATE dbo.StreetCrime
+SET Falls_within = 'Unknown'
+WHERE Falls_within IS NULL;
+
+UPDATE dbo.StreetCrime
+SET Longitude = 0 
+WHERE ISNUMERIC(Longitude) = 0;
+
+UPDATE dbo.StreetCrime
+SET Latitude = 0 
+WHERE ISNUMERIC(Latitude) = 0;
+
+UPDATE dbo.StreetCrime
+SET Location = 'Unknown'
+WHERE Location IS NULL;
+
+UPDATE dbo.StreetCrime
+SET LSOA_code = 'Unknown'
+WHERE LSOA_code IS NULL;
+
+UPDATE dbo.StreetCrime
+SET LSOA_name = 'Unknown'
+WHERE LSOA_name IS NULL;
+
+UPDATE dbo.StreetCrime
+SET Crime_type = 'Unknown'
+WHERE Crime_type IS NULL;
+
+UPDATE dbo.StreetCrime
+SET Last_outcome_category = 'Unknown'
+WHERE Last_outcome_category IS NULL;
+
+UPDATE dbo.StreetCrime
+SET Context = 'Unknown'
+WHERE Context IS NULL;
+
+
+-- Backing up the Database
+
+BACKUP DATABASE [YorkshireCrimeDB]
+TO DISK = 'E:\KDU\SQL for Data Science\Assignment 2\YorkshireCrimeDB.bak'
+WITH INIT, COMPRESSION;
+
+
+
+
+
+
+
+
