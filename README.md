@@ -1,3 +1,61 @@
 # Yorkshire-Humber-Crime-Analysis
-Here are the polished versions of your project assets, formatted with clear spacing and emojis so they are ready to be copied and pasted directly into GitHub and LinkedIn.📁 GitHub Repository DetailsSuggested Title:Yorkshire-Humber-Crime-Analysis-Dashboard 📉🔍Project Description:
-A comprehensive data engineering and analytics project investigating crime trends in the Yorkshire and Humber region. Using a pipeline of SQL Server for heavy-duty data cleaning and Power BI for interactive storytelling, this dashboard analyzes over 1.34 million records from 2022 to 2023 to provide insights into public safety and law enforcement.📄 README.md Content🚔 Yorkshire & Humber Region Crime Analysis (2022–2023)🌟 Project OverviewThis project transforms raw police data into a high-impact visual dashboard to assist the Yorkshire and Humber Regional Organized Crime Unit (YHROCU). By analyzing 1.34M street crimes and 63.37k stop-and-search incidents, the study highlights critical trends in crime types, judicial outcomes, and regional hotspots.🛠️ Technical WorkflowData Acquisition 📥: Extracted 264 datasets spanning 24 months from the official UK police data portal.Data Engineering ⚙️: Imported data into SQL Server and performed rigorous cleaning using Common Table Expressions (CTE) and ROW_NUMBER() to eliminate duplicates.Data Refinement 🧹: Handled missing values by standardizing nulls as 'Unknown' for categories and '0' for geographic coordinates to maintain map accuracy.Advanced Analytics 🧠: Developed custom DAX measures in Power BI to calculate percentage shares for the most frequent crimes and outcomes.📊 Key InsightsMost Common Crime 🚩: Violence and sexual offenses represent 39.5% of all reported incidents.Judicial Outcomes ⚖️: A significant 38.6% to 44.4% of cases result in an "Unable to Prosecute" status.Stop & Search 🔎: Only 16.2% of searches lead to an arrest, with 74.7% being person-based searches.Regional Hotspots 📍: West Yorkshire accounts for 50.9% of the region's reported crimes.💻 Tech StackDatabase: SQL Server (Data Extraction & Cleaning) Visualization: Power BI (Interactive Dashboarding) Logic: DAX (Data Analysis Expressions) 
+🚔Yorkshire & Humber Crime Analysis Dashboard
+
+📌 Overview
+
+This project analyzes crime data from the Yorkshire & Humber region using SQL Server and Power BI. The goal is to transform raw police datasets into meaningful insights through data cleaning, modeling, and visualization.
+
+📂 Dataset
+
+Source: UK Police Open Data (https://data.police.uk/
+)
+Time Period: 2022–2023
+Total Files: 264 datasets
+Categories:
+Street Crime
+Stop and Search
+Crime Outcomes
+
+⚙️ Tools & Technologies
+
+SQL Server Management Studio (SSMS)
+Power BI
+DAX (Data Analysis Expressions)
+
+🧹 Data Processing
+
+Imported datasets manually into SQL Server
+Consolidated into 3 main tables:
+StreetCrime
+StopAndSearch
+CrimeOutcomes
+Removed duplicates using CTE and ROW_NUMBER()
+Handled null values:
+Text fields → "Unknown"
+Numeric fields → 0
+Database backup created before visualization
+
+📈 Dashboard Features
+
+Interactive navigation with filters (Year, Region)
+Visual breakdowns of:
+Crime types
+Monthly & seasonal trends
+Geographic distribution
+Demographics (age, gender, ethnicity)
+Key KPIs using DAX (e.g., most common crime percentage)
+Map visualizations filtered for valid coordinates
+
+🔍 Key Insights
+
+Violent & sexual offenses ≈ 40% of total crimes
+High percentage of cases result in no prosecution (38%–44%)
+Stop & search:
+~63K incidents
+Only ~16% lead to arrests
+Crime is concentrated in West Yorkshire
+Seasonal patterns show peaks during summer months
+
+📌 Conclusion
+
+This project demonstrates how data analytics can support law enforcement and policymakers by identifying trends, inefficiencies, and high-risk areas. The dashboard provides a foundation for improving crime prevention strategies and resource allocation.
